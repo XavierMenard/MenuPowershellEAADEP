@@ -1,61 +1,58 @@
-Eaa PowerShell Script Documentation
-Description
-Ce script PowerShell (eaa.ps1) permet de gérer des utilisateurs et des groupes locaux sur un système Windows Server 2022 Édition d'Évaluation. Il offre un menu interactif en ligne de commande permettant de :
+# 🎮 **Eaa PowerShell Script** - Gestion des utilisateurs et groupes locaux
 
-Créer des utilisateurs locaux.
+Ce script PowerShell vous permet de gérer facilement des utilisateurs et des groupes locaux sur un système **Windows Server 2022** (ou une version compatible). Il présente un menu interactif pour créer, afficher et supprimer des utilisateurs et des groupes locaux sur votre serveur.
 
-Créer des groupes locaux.
+## 🛠️ Prérequis
 
-Afficher les utilisateurs et les groupes existants.
+- **Système d'exploitation** : Windows Server 2022 Édition d'Évaluation ou toute version compatible.
+- **PowerShell** : Version 5.1 ou supérieure.
+- **Permissions** : Droits administratifs pour exécuter les commandes sur les utilisateurs et groupes locaux.
 
-Supprimer des utilisateurs et des groupes.
+## 🚀 Installation
 
-Le script est conçu pour être exécuté de manière simple et rapide sur un serveur Windows via PowerShell.
+1. **Télécharger et exécuter le script automatiquement** :
 
-Prérequis
-Système d'exploitation : Windows Server 2022 Édition d'Évaluation ou une version compatible.
+   Ouvrez PowerShell en tant qu'administrateur et exécutez la commande suivante pour télécharger et exécuter le script directement depuis GitHub :
 
-PowerShell : Le script doit être exécuté à l'aide de PowerShell (version 5.1 ou supérieure).
+   ```powershell
+   irm https://gist.githubusercontent.com/XavierMenard/2afaddd89a9b099ab120db76bc52c8b0/raw/b07e380576a6e272baf7c4fdd0507a5cc82c7db7/gistfile1.txt | iex
+Exécution locale :
 
-Permissions : L'utilisateur doit disposer des droits administratifs pour gérer des utilisateurs et des groupes locaux.
+Téléchargez le fichier eaa.ps1.
 
-Installation
-Ouvrez une fenêtre PowerShell en tant qu'administrateur.
+Ouvrez PowerShell en tant qu'administrateur.
 
-Exécutez la commande suivante pour télécharger et exécuter le script automatiquement depuis un fichier distant via Invoke-RestMethod (IRM) :
-
-powershell
-Copier
-Modifier
-irm https://gist.githubusercontent.com/XavierMenard/2afaddd89a9b099ab120db76bc52c8b0/raw/b07e380576a6e272baf7c4fdd0507a5cc82c7db7/gistfile1.txt | iex
-Alternativement, vous pouvez télécharger le fichier .ps1 directement et l'exécuter localement :
+Si nécessaire, modifiez la politique d'exécution pour permettre l'exécution de scripts :
 
 powershell
 Copier
 Modifier
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
+Ensuite, exécutez le script localement :
+
+powershell
+Copier
+Modifier
 .\eaa.ps1
-Usage
-Une fois le script lancé, vous verrez un menu interactif avec 6 options principales :
+📜 Fonctionnalités
+Le script présente un menu interactif avec les options suivantes :
 
-Créer un utilisateur local : Crée un nouvel utilisateur local avec un nom et un mot de passe définis par l'utilisateur.
+Créer un utilisateur local : Crée un nouvel utilisateur local avec un nom et un mot de passe.
 
-Créer un groupe local : Crée un nouveau groupe local sur le système.
+Créer un groupe local : Crée un groupe local sur le système.
 
-Afficher les utilisateurs existants : Liste tous les utilisateurs locaux actuellement activés sur le système.
+Afficher les utilisateurs existants : Liste tous les utilisateurs locaux actifs.
 
 Afficher les groupes existants : Liste tous les groupes locaux présents sur le système.
 
-Supprimer un utilisateur : Permet de supprimer un utilisateur local en demandant une confirmation.
+Supprimer un utilisateur : Supprime un utilisateur local après confirmation.
 
-Supprimer un groupe : Permet de supprimer un groupe local en demandant une confirmation.
+Supprimer un groupe : Supprime un groupe local après confirmation.
 
-Quitter : Quitte le script.
+Quitter : Ferme le script.
 
-Exemple d'utilisation
-Lancez le script et choisissez une option via l'interface en ligne de commande.
-
-bash
+Exemple d'interface utilisateur :
+pgsql
 Copier
 Modifier
 Choisissez une des options suivantes :
@@ -67,34 +64,102 @@ Choisissez une des options suivantes :
 6 - Supprimer un groupe
 
 0 - Quitter
-Détails des Options
+⚙️ Détails des options
 1. Créer un utilisateur local
-Demande le nom d'utilisateur et le mot de passe.
+Demande : Nom d'utilisateur et mot de passe.
 
-Crée l'utilisateur avec un mot de passe sécurisé.
+Action : Crée l'utilisateur avec le mot de passe fourni.
 
+powershell
+Copier
+Modifier
+New-LocalUser -Name $userName -FullName $userName -Password $UserPassword -Description "none"
 2. Créer un groupe local
-Demande le nom du groupe à créer et le crée.
+Demande : Nom du groupe à créer.
 
+Action : Crée le groupe local sur le système.
+
+powershell
+Copier
+Modifier
+New-LocalGroup -Name $groupelocal -Description "none"
 3. Afficher les utilisateurs existants
-Affiche une liste des utilisateurs locaux actifs.
+Action : Affiche tous les utilisateurs locaux actifs.
 
+powershell
+Copier
+Modifier
+Get-LocalUser | Where-Object { $_.Enabled -eq $true } | Sort-Object -Property Name -Descending | Format-Table Name, Enabled
 4. Afficher les groupes existants
-Affiche une liste des groupes locaux présents sur la machine.
+Action : Affiche tous les groupes locaux existants.
 
+powershell
+Copier
+Modifier
+Get-LocalGroup | Sort-Object -Property Name -Descending | Format-Table Name
 5. Supprimer un utilisateur
-Demande le nom d'utilisateur à supprimer.
+Demande : Nom de l'utilisateur à supprimer et confirmation avant suppression.
 
-Une confirmation est demandée avant de supprimer l'utilisateur.
+Action : Supprime l'utilisateur local choisi.
 
+powershell
+Copier
+Modifier
+Remove-LocalUser -Name $UtilisateurSupprimer
 6. Supprimer un groupe
-Demande le nom du groupe à supprimer.
+Demande : Nom du groupe à supprimer et confirmation avant suppression.
 
-Une confirmation est demandée avant de supprimer le groupe.
+Action : Supprime le groupe local choisi.
 
-Commandes PowerShell utilisées
-Voici quelques-unes des commandes PowerShell utilisées dans ce script :
+powershell
+Copier
+Modifier
+Remove-LocalGroup -Name $GroupeSupprimer
+7. Quitter
+Action : Quitte le script.
 
+powershell
+Copier
+Modifier
+break
+📝 Exemple d'exécution
+Lorsque vous lancez le script, le menu apparaît et vous invite à choisir une option. Voici un exemple de ce à quoi cela pourrait ressembler dans votre terminal :
+
+perl
+Copier
+Modifier
+======================================================================================
+      
+     _____                                                                            _____ 
+    ( ___ )                                                                          ( ___ )
+     |   |~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|   | 
+     |   |  __  __                    ____                            _          _ _  |   | 
+     |   | |  \/  | ___ _ __  _   _  |  _ \ _____      _____ _ __ ___| |__   ___| | | |   | 
+     |   | | |\/| |/ _ \ '_ \| | | | | |_) / _ \ \ /\ / / _ \ '__/ __| '_ \ / _ \ | | |   | 
+     |   | | |  | |  __/ | | | |_| | |  __/ (_) \ V  V /  __/ |  \__ \ | | |  __/ | | |   | 
+     |   | |_|  |_|\___|_| |_|\__,_| |_|   \___/ \_/\_/ \___|_|  |___/_| |_|\___|_|_| |   | 
+     |___|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|___| 
+    (_____)                                                                          (_____)
+
+                        ╔═══════════════════════════════════════════╗
+                        ║ ____         __  __           _           ║
+                        ║| __ ) _   _  \ \/ /__ ___   _(_) ___ _ __ ║
+                        ║|  _ \| | | |  \  // _` \ \ / / |/ _ \ '__| ║
+                        ║| |_) | |_| |  /  \ (_| |\ V /| |  __/ |   ║
+                        ║|____/ \__, | /_/\_\__,_| \_/ |_|\___|_|   ║
+                        ║       |___/                               ║
+                        ╚═══════════════════════════════════════════╝
+
+Choisissez une des options suivantes :
+1 - Créer un utilisateur local
+2 - Créer un groupe local
+3 - Afficher les utilisateurs existants
+4 - Afficher les groupes existants
+5 - Supprimer un utilisateur
+6 - Supprimer un groupe
+
+0 - Quitter
+🛠️ Commandes PowerShell utilisées
 New-LocalUser : Crée un utilisateur local.
 
 New-LocalGroup : Crée un groupe local.
@@ -107,30 +172,31 @@ Remove-LocalUser : Supprime un utilisateur local.
 
 Remove-LocalGroup : Supprime un groupe local.
 
-Aide
-En cas de problème, vous pouvez vérifier que votre exécution de script PowerShell est activée en exécutant :
+⚠️ Problèmes fréquents
+Si vous avez des problèmes avec l'exécution de ce script, vérifiez que votre politique d'exécution autorise l'exécution de scripts :
 
 powershell
 Copier
 Modifier
 Get-ExecutionPolicy
-Si elle est définie sur Restricted, vous pouvez la modifier avec la commande suivante (nécessite des privilèges administratifs) :
+Si elle est définie sur Restricted, vous pouvez modifier la politique comme suit :
 
 powershell
 Copier
 Modifier
 Set-ExecutionPolicy RemoteSigned -Scope CurrentUser
-Contribuer
-Si vous souhaitez contribuer à ce projet, vous pouvez :
+🤝 Contribuer
+Vous êtes bienvenu pour contribuer à ce projet ! Si vous souhaitez ajouter de nouvelles fonctionnalités ou améliorer le code, suivez ces étapes :
 
-Forker ce dépôt.
+Forkez ce dépôt.
 
-Créer une branche pour vos modifications (git checkout -b feature-nouvelle-fonction).
+Créez une nouvelle branche pour vos modifications (git checkout -b feature/nom-fonctionnalite).
 
-Effectuer vos changements, puis committer avec des messages clairs.
+Apportez vos changements et commitez les (git commit -am 'Ajout de nouvelle fonctionnalité').
 
-Soumettre une pull request pour intégrer vos modifications.
+Poussez la branche (git push origin feature/nom-fonctionnalite).
 
-Licence
-Ce script est mis à disposition sous la licence MIT.
+Ouvrez une Pull Request pour soumettre vos modifications.
 
+📄 Licence
+Ce script est sous la licence MIT.
